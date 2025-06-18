@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using UnityEngine.UIElements;
 
 public class MainManager : MonoBehaviour
 {
@@ -11,6 +12,7 @@ public class MainManager : MonoBehaviour
     public Rigidbody Ball;
 
     public Text ScoreText;
+    public Text topText;
     public GameObject GameOverText;
     
     private bool m_Started = false;
@@ -24,6 +26,7 @@ public class MainManager : MonoBehaviour
     {
         const float step = 0.6f;
         int perLine = Mathf.FloorToInt(4.0f / step);
+        topText.text = "Hi-Score: " + DataStoring.Instance.hi.ToString() + ", Name: " + DataStoring.Instance.username;
         
         int[] pointCountArray = new [] {1,1,2,2,5,5};
         for (int i = 0; i < LineCount; ++i)
@@ -72,5 +75,14 @@ public class MainManager : MonoBehaviour
     {
         m_GameOver = true;
         GameOverText.SetActive(true);
+        if (m_Points > DataStoring.Instance.hi)
+        {
+            DataStoring.Instance.hi = m_Points;
+            DataStoring.Instance.SaveUserData();
+        }
+        else
+        {
+            DataStoring.Instance.SaveUserData();
+        }
     }
 }
